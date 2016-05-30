@@ -31,6 +31,7 @@ if [ ! -f /home/vagrant/.provisioned/.desktop ]; then
     mate-themes mate-themes-extras mate-icon-theme-faenza \
     mate-system-monitor mate-system-log system-config-language \
     system-config-users dconf-editor
+  systemctl set-default graphical.target
     touch /home/vagrant/.provisioned/.desktop
 else
   echo "Skipping Desktop installation..."
