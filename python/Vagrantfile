@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
 mkdir /home/vagrant/.provisioned -p
 if [ ! -f /home/vagrant/.provisioned/.python ]; then
   yum install -y python python34
-  touch /home/vagrant/provisioned/.python
+  touch /home/vagrant/.provisioned/.python
 else
   echo "Skipping Python installation..."
 fi
