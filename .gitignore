@@ -5,6 +5,7 @@
 !/gui
 !/nodejs
 !/python
+!/php
 
 # General files
 !*/Vagrantfile

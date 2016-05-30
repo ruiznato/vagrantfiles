@@ -1,0 +1,46 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.synced_folder ".", "/shared", nfs: true
+
+  config.vm.define :python do |python|
+    python.vm.box = "neito/centos7"
+    python.vm.hostname = 'dev-php'
+    python.vm.network :private_network, ip: '192.168.56.5'
+
+    python.vm.provider :virtualbox do |vb|
+      vb.name = "dev-php"
+      vb.customize ["modifyvm", :id, "--memory", "512"]
+      vb.customize ["modifyvm", :id, "--cpus", "1"]
+    end
+
+    python.vm.provision :shell, inline: <<-SCRIPT
+mkdir /home/vagrant/.provisioned -p
+if [ ! -f /home/vagrant/.provisioned/.php ]; then
+  yum -y install httpd php php-mysql php-mcrypt
+  touch /home/vagrant/.provisioned/.php
+else
+  echo "Skipping PHP installation..."
+fi
+
+if [ ! -f /home/vagrant/.provisioned/.mysql ]; then
+  wget http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+  yum -y localinstall mysql57-community-release-el7-7.noarch.rpm
+  yum -y install mysql-community-server
+  rm -rf mysql57-community-release-el7-7.noarch.rpm
+  touch /home/vagrant/.provisioned/.mysql
+else
+  echo "Skipping MySQL installation..."
+fi
+
+if [ ! -f /home/vagrant/.provisioned/.composer ]; then
+  curl -s https://getcomposer.org/installer | php
+  touch /home/vagrant/.provisioned/.composer
+else
+  echo "Skipping Composer installation..."
+fi
+
+SCRIPT
+  end
+end
