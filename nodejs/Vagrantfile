@@ -1,0 +1,55 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.synced_folder ".", "/shared", nfs: true
+
+  config.vm.define :nodejs do |nodejs|
+    nodejs.vm.box = "neito/centos7"
+    nodejs.vm.hostname = 'dev-nodejs'
+    nodejs.vm.network :private_network, ip: '192.168.56.3'
+
+    nodejs.vm.provider :virtualbox do |vb|
+      vb.name = "dev-nodejs"
+
+      # after provisioning change to "true" to start in GUI mode
+      vb.gui = false
+
+      vb.customize ["modifyvm", :id, "--memory", "512"]
+      vb.customize ["modifyvm", :id, "--cpus", "1"]
+    end
+
+    nodejs.vm.provision :shell, inline: <<-SCRIPT
+mkdir /home/vagrant/.provisioned -p
+if [ ! -f /home/vagrant/.provisioned/.nodejs ]; then
+  $(curl --silent --location https://rpm.nodesource.com/setup_4.x | bash -) &>/dev/null
+  yum install -y gcc-c++ make nodejs
+  touch /home/vagrant/.provisioned/.nodejs
+else
+  echo "Skipping NodeJS installation..."
+fi
+
+if [ ! -f /home/vagrant/.provisioned/.mongodb ]; then
+cat <<EOF > /etc/yum.repos.d/mongodb-org-3.2.repo
+[mongodb-org-3.2]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/\\$releasever/mongodb-org/3.2/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-3.2.asc
+EOF
+  yum install -y mongodb-org
+  touch /home/vagrant/.provisioned/.mongodb
+else
+  echo "Skipping MongoDB installation..."
+fi
+
+if [ ! -f /home/vagrant/.provisioned/.utilities ]; then
+  yum -y install git svn
+  touch /home/vagrant/.provisioned/.utilities
+else
+  echo "Skipping Utilities installation..."
+fi
+SCRIPT
+  end
+end

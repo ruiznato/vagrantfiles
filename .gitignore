@@ -1,0 +1,17 @@
+# Ignore all
+*
+
+# Accept allowed Vagrant VM
+!/gui
+!/nodejs
+!/python
+
+# General files
+!*/Vagrantfile
+!.gitignore
+!README.md
+!LICENSE
+!Vagrantfile
+
+# Ignore all .vagrant folders
+.vagrant

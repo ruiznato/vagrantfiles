@@ -1,0 +1,69 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.synced_folder ".", "/shared", nfs: true
+
+
+  config.vm.define :gui do |gui|
+    gui.vm.box = "neito/centos7"
+    gui.vm.hostname = 'dev-gui'
+    gui.vm.network :private_network, ip: '192.168.56.2'
+
+    gui.vm.provider :virtualbox do |vb|
+      vb.name = "dev-gui"
+
+      # after provisioning change to "true" to start in GUI mode
+      vb.gui = false
+
+      vb.customize ["modifyvm", :id, "--memory", "2480"]
+      vb.customize ["modifyvm", :id, "--cpus", "2"]
+    end
+
+    gui.vm.provision :shell, inline: <<-SCRIPT
+mkdir /home/vagrant/.provisioned -p
+if [ ! -f /home/vagrant/.provisioned/.desktop ]; then
+  yum groupinstall -y "X Window System" Fonts
+  yum install -y dkms dkms-reconfigure lightdm
+  yum install -y mate-desktop mate-terminal mate-backgrounds mate-backgrounds \
+    mate-utils mate-icon-theme mate-settings-daemon network-manager-applet \
+    mate-power-manager install caja caja-open-terminal caja-sendto \
+    mate-themes mate-themes-extras mate-icon-theme-faenza \
+    mate-system-monitor mate-system-log system-config-language \
+    system-config-users dconf-editor
+    touch /home/vagrant/.provisioned/.desktop
+else
+  echo "Skipping Desktop installation..."
+fi
+
+if [ ! -f /home/vagrant/.provisioned/.utilities ]; then
+  yum install -y filezilla meld java ant git svn
+  touch /home/vagrant/.provisioned/.utilities
+else
+  echo "Skipping Utilities installation..."
+fi
+
+if [ ! -f /home/vagrant/.provisioned/.google-chrome ]; then
+cat <<EOF >/etc/yum.repos.d/google-chrome.repo
+[google-chrome]
+name=google-chrome
+baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
+EOF
+  yum -y install google-chrome-stable
+  touch /home/vagrant/.provisioned/.google-chrome
+else
+  echo "Skipping Google Chrome installation..."
+fi
+
+if [ ! -f /home/vagrant/.provisioned/.atom ]; then
+  yum -y install https://github.com/atom/atom/releases/download/v1.7.4/atom.x86_64.rpm
+  touch /home/vagrant/.provisioned/.atom
+else
+  echo "Skipping Atom.io installation..."
+fi
+SCRIPT
+  end
+end
