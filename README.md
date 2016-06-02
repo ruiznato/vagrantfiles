@@ -34,3 +34,4 @@ All VMs are based on CentOS 7 Minimal
 | gui    | 192.168.56.2 | MATE Desktop + Google Chrome + Atom |
 | nodejs | 192.168.56.3 | NodeJS + NPM + MongoDB              |
 | python | 192.168.56.4 | Python 2.7 + Python 3.4 + Pip       |
+| php    | 192.168.56.5 | PHP + MariaDB                       |
