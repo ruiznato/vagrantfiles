@@ -18,18 +18,26 @@ Vagrant.configure("2") do |config|
     php.vm.provision :shell, inline: <<-SCRIPT
 mkdir /home/vagrant/.provisioned -p
 if [ ! -f /home/vagrant/.provisioned/.php ]; then
-  yum -y install httpd php php-mysql php-mcrypt
+  yum -y install httpd php php-mysql php-mcrypt php-fpm php-gd
+  systemctl enable httpd.service
+  systemctl restart httpd.service
   touch /home/vagrant/.provisioned/.php
 else
   echo "Skipping PHP installation..."
 fi
 
-if [ ! -f /home/vagrant/.provisioned/.mysql ]; then
-  wget http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
-  yum -y localinstall mysql57-community-release-el7-7.noarch.rpm
-  yum -y install mysql-community-server
-  rm -rf mysql57-community-release-el7-7.noarch.rpm
-  touch /home/vagrant/.provisioned/.mysql
+if [ ! -f /home/vagrant/.provisioned/.mariadb ]; then
+cat <<-EOF >/etc/yum.repos.d/mariadb.repo
+# MariaDB 10.1 CentOS repository list - created 2016-06-01 02:53 UTC
+# # http://downloads.mariadb.org/mariadb/repositories/
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.1/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+EOF
+  yum -y install MariaDB-server MariaDB-client
+  touch /home/vagrant/.provisioned/.mariadb
 else
   echo "Skipping MySQL installation..."
 fi
