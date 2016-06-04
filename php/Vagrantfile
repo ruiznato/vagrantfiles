@@ -4,11 +4,15 @@
 Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/shared", nfs: true
 
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true
+
   config.vm.define :php do |php|
     php.vm.box = "neito/centos7"
-    php.vm.hostname = 'dev-php'
+    php.vm.hostname = 'php.dev'
     php.vm.network :private_network, ip: '192.168.56.5'
-
+    php.hostmanager.aliases = %w(example.dev)
     php.vm.provider :virtualbox do |vb|
       vb.name = "dev-php"
       vb.customize ["modifyvm", :id, "--memory", "512"]

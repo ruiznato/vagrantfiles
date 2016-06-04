@@ -1,7 +1,12 @@
 # Vagrantfiles
 
 Multiple Virtual Machine configured for specific languages.
-
+## Requirements
+This VMs utilize Vagrant plugin [Host Manager](https://github.com/devopsgroup-io/vagrant-hostmanager). Install it with the following command:
+```
+vagrant plugin install vagrant-hostmanager
+```
+In Windows, in order to utilize "rsync" for the sharing folders is recommended to install **Cygwin** or **Baboon**.
 ## Usage
 To start all VMs just clone the repo and execute `vagrant up`.
 
