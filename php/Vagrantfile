@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.synced_folder ".", "/shared", nfs: true
+  config.vm.synced_folder ".", "/shared", type: "rsync", nfs: true
 
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
