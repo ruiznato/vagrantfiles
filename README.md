@@ -1,5 +1,7 @@
 # Vagrantfiles
 
+[![Build Status](https://travis-ci.org/ruiznato/vagrantfiles.svg?branch=master)](https://travis-ci.org/ruiznato/vagrantfiles)
+
 Multiple Virtual Machine configured for specific languages.
 ## Requirements
 This VMs utilize Vagrant plugin [Host Manager](https://github.com/devopsgroup-io/vagrant-hostmanager). Install it with the following command:
