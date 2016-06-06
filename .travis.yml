@@ -1,0 +1,14 @@
+sudo: required
+dist: trusty
+language: ruby
+install:
+  - sudo echo "deb http://download.virtualbox.org/virtualbox/debian trusty contrib" | sudo tee -a /etc/apt/sources.list
+  - wget http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | sudo apt-key add -
+  - sudo apt-get update
+  - sudo apt-get -y install linux-headers-$(uname -r)
+  - sudo apt-get -y install virtualbox-5.0
+  - wget https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb
+  - sudo dpkg -i vagrant_1.8.1_x86_64.deb
+script:
+  - vagrant status
+  

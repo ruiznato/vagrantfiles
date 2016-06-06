@@ -34,9 +34,9 @@ begin
 ## Available languages
 All VMs are based on CentOS 7 Minimal
 
-| Name   | IP Address   | Content                             |
-|--------|--------------|-------------------------------------|
-| gui    | 192.168.56.2 | MATE Desktop + Google Chrome + Atom |
-| nodejs | 192.168.56.3 | NodeJS + NPM + MongoDB              |
-| python | 192.168.56.4 | Python 2.7 + Python 3.4 + Pip       |
-| php    | 192.168.56.5 | PHP + MariaDB                       |
+| Name   | IP Address   | Hostname   | Content                             |
+|--------|--------------|------------|-------------------------------------|
+| gui    | 192.168.56.2 | gui.dev    | MATE Desktop + Google Chrome + Atom |
+| nodejs | 192.168.56.3 | nodejs.dev | NodeJS + NPM + MongoDB              |
+| python | 192.168.56.4 | python.dev | Python 2.7 + Python 3.4 + Pip       |
+| php    | 192.168.56.5 | php.dev    | PHP + MariaDB                       |

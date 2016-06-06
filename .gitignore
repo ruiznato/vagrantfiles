@@ -13,6 +13,7 @@
 !README.md
 !LICENSE
 !Vagrantfile
+!.travis.yml
 
 # Ignore all .vagrant folders
 .vagrant
